@@ -1,0 +1,22 @@
+# Ambiente virtual
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# VSCode/VSCodium
+.vscode/
+
+# Testes
+.pytest_cache/
+
+# Variáveis de ambiente
+.env
+
+# Cobertura
+htmlcov/
+.coverage
+
+# Sistema
+.DS_Store
