@@ -1,6 +1,9 @@
 from app.model.categoria import Categoria
 from app.repository.categoria_repository import CategoriaRepository
-
+from app.exceptions.categoria_exceptions import (
+    CategoriaNaoEncontradaException,
+    CategoriaDuplicadaException
+)
 
 class CategoriaService:
 
@@ -12,10 +15,12 @@ class CategoriaService:
 
     def buscar_por_id(self, categoria_id: int):
         categoria = self.repository.buscar_por_id(categoria_id)
-
+    
         if not categoria:
-            raise ValueError("Categoria não encontrada")
-
+            raise CategoriaNaoEncontradaException(
+                "Categoria não encontrada"
+            )
+    
         return categoria
 
     def criar(self, nome: str, descricao: str | None = None):
@@ -24,7 +29,7 @@ class CategoriaService:
 
         for categoria in categorias:
             if categoria.nome.lower() == nome.lower():
-                raise ValueError(
+                raise CategoriaDuplicadaException(
                     "Já existe uma categoria com esse nome"
                 )
 
