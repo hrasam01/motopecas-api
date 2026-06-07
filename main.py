@@ -1,6 +1,11 @@
 from fastapi import FastAPI
 
-from app.controller.categoria_controller import router as categoria_router
+from app.controller.categoria_controller import (
+    router as categoria_router
+)
+from app.controller.peca_controller import (
+    router as peca_router
+)
 
 from app.exceptions.handlers import (
     categoria_nao_encontrada_handler,
@@ -21,9 +26,6 @@ from app.exceptions.peca_exceptions import (
     EstoqueInvalidoException
 )
 
-
-
-
 app = FastAPI(
     title="MotoPeças API",
     description="API para gerenciamento de peças de motocicletas",
@@ -31,6 +33,7 @@ app = FastAPI(
 )
 
 app.include_router(categoria_router)
+app.include_router(peca_router)
 
 app.add_exception_handler(
     CategoriaNaoEncontradaException,
