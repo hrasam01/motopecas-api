@@ -1,6 +1,9 @@
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import (
+    Mapped,
+    mapped_column,
+    relationship
+)
 
 from app.database.base import Base
 
@@ -19,7 +22,10 @@ class Categoria(Base):
         unique=True
     )
 
-    descricao: Mapped[str] = mapped_column(
+    descricao: Mapped[str | None] = mapped_column(
         String(255),
         nullable=True
+    )
+    pecas: Mapped[list["Peca"]] = relationship(
+        back_populates="categoria"
     )
