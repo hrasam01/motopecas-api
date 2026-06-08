@@ -20,6 +20,22 @@ from app.controller.cliente_controller import (
     router as cliente_router
 )
 
+from app.controller.fornecedor_controller import (
+    router as fornecedor_router
+)
+
+from app.controller.compra_controller import (
+    router as compra_router
+)
+
+from app.controller.venda_controller import (
+    router as venda_router
+)
+
+from app.controller.financeiro_controller import (
+    router as financeiro_router
+)
+
 from app.exceptions.handlers import (
     categoria_nao_encontrada_handler,
     categoria_duplicada_handler,
@@ -30,7 +46,12 @@ from app.exceptions.handlers import (
     credenciais_invalidas_handler,
     cliente_nao_encontrado_handler,
     cliente_ja_existe_handler,
-    cep_invalido_handler
+    cep_invalido_handler,
+    fornecedor_nao_encontrado_handler,
+    fornecedor_ja_existe_handler,
+    compra_invalida_handler,
+    venda_invalida_handler,
+    estoque_insuficiente_handler
 )
 
 from app.exceptions.categoria_exceptions import (
@@ -55,6 +76,20 @@ from app.exceptions.cliente_exceptions import (
     CepInvalidoException
 )
 
+from app.exceptions.fornecedor_exceptions import (
+    FornecedorNaoEncontradoException,
+    FornecedorJaExisteException
+)
+
+from app.exceptions.compra_exceptions import (
+    CompraInvalidaException
+)
+
+from app.exceptions.venda_exceptions import (
+    VendaInvalidaException,
+    EstoqueInsuficienteException
+)
+
 app = FastAPI(
     title="MotoPeças API",
     description="API para gerenciamento de peças de motocicletas",
@@ -66,6 +101,10 @@ app.include_router(peca_router)
 app.include_router(usuario_router)
 app.include_router(auth_router)
 app.include_router(cliente_router)
+app.include_router(fornecedor_router)
+app.include_router(compra_router)
+app.include_router(venda_router)
+app.include_router(financeiro_router)
 
 app.add_exception_handler(
     CategoriaNaoEncontradaException,
@@ -115,6 +154,31 @@ app.add_exception_handler(
 app.add_exception_handler(
     CepInvalidoException,
     cep_invalido_handler
+)
+
+app.add_exception_handler(
+    FornecedorNaoEncontradoException,
+    fornecedor_nao_encontrado_handler
+)
+
+app.add_exception_handler(
+    FornecedorJaExisteException,
+    fornecedor_ja_existe_handler
+)
+
+app.add_exception_handler(
+    CompraInvalidaException,
+    compra_invalida_handler
+)
+
+app.add_exception_handler(
+    VendaInvalidaException,
+    venda_invalida_handler
+)
+
+app.add_exception_handler(
+    EstoqueInsuficienteException,
+    estoque_insuficiente_handler
 )
 
 @app.get("/")
