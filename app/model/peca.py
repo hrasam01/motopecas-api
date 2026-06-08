@@ -49,3 +49,11 @@ class Peca(Base):
     categoria: Mapped["Categoria"] = relationship(
         back_populates="pecas"
     )
+
+    compras = relationship(
+        "Compra"
+    )
+
+    vendas = relationship(
+        "Venda"
+    )

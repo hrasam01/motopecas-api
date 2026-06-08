@@ -1,0 +1,2 @@
+class CompraInvalidaException(Exception):
+    pass

@@ -23,6 +23,19 @@ from app.exceptions.cliente_exceptions import (
     CepInvalidoException
 )
 
+from app.exceptions.fornecedor_exceptions import (
+    FornecedorNaoEncontradoException,
+    FornecedorJaExisteException
+)
+
+from app.exceptions.compra_exceptions import (
+    CompraInvalidaException
+)
+
+from app.exceptions.venda_exceptions import (
+    VendaInvalidaException,
+    EstoqueInsuficienteException
+)
 
 async def categoria_nao_encontrada_handler(
     request: Request,
@@ -121,6 +134,59 @@ async def cliente_ja_existe_handler(
 async def cep_invalido_handler(
     request,
     exc: CepInvalidoException
+):
+    return JSONResponse(
+        status_code=400,
+        content={"erro": str(exc)}
+    )
+
+async def fornecedor_nao_encontrado_handler(
+    request: Request,
+    exc: FornecedorNaoEncontradoException
+):
+    return JSONResponse(
+        status_code=404,
+        content={
+            "erro": str(exc)
+        }
+    )
+
+
+async def fornecedor_ja_existe_handler(
+    request: Request,
+    exc: FornecedorJaExisteException
+):
+    return JSONResponse(
+        status_code=400,
+        content={
+            "erro": str(exc)
+        }
+    )
+
+async def compra_invalida_handler(
+    request: Request,
+    exc: CompraInvalidaException
+):
+    return JSONResponse(
+        status_code=400,
+        content={
+            "erro": str(exc)
+        }
+    )
+
+async def venda_invalida_handler(
+    request: Request,
+    exc: VendaInvalidaException
+):
+    return JSONResponse(
+        status_code=400,
+        content={"erro": str(exc)}
+    )
+
+
+async def estoque_insuficiente_handler(
+    request: Request,
+    exc: EstoqueInsuficienteException
 ):
     return JSONResponse(
         status_code=400,
