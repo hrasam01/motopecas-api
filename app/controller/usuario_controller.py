@@ -16,6 +16,10 @@ from app.service.usuario_service import (
     UsuarioService
 )
 
+from app.security.auth_dependency import (
+    get_current_user
+)
+
 router = APIRouter(
     prefix="/usuarios",
     tags=["Usuários"]
@@ -56,7 +60,7 @@ def criar_usuario(
     response_model=list[UsuarioResponseDTO]
 )
 def listar_usuarios(
-    service: UsuarioService = Depends(get_service)
+    service: UsuarioService = Depends(get_service),
+    usuario=Depends(get_current_user)
 ):
-
     return service.listar()

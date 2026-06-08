@@ -39,16 +39,18 @@ def get_service(
     )
 
 
+from fastapi.security import OAuth2PasswordRequestForm
+
 @router.post(
     "/login",
     response_model=TokenDTO
 )
 def login(
-    dto: LoginDTO,
+    form_data: OAuth2PasswordRequestForm = Depends(),
     service: AuthService = Depends(get_service)
 ):
 
     return service.login(
-        email=dto.email,
-        senha=dto.senha
+        email=form_data.username,
+        senha=form_data.password
     )

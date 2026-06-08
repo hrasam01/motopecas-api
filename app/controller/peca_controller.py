@@ -3,6 +3,10 @@ from sqlalchemy.orm import Session
 
 from app.database.dependencies import get_db
 
+from app.security.auth_dependency import (
+    get_current_user
+)
+
 from app.dto.peca_dto import (
     PecaCreateDTO,
     PecaResponseDTO
@@ -49,7 +53,8 @@ def get_service(
     response_model=list[PecaResponseDTO]
 )
 def listar_pecas(
-    service: PecaService = Depends(get_service)
+    service: PecaService = Depends(get_service),
+    usuario=Depends(get_current_user)
 ):
 
     pecas = service.listar()
@@ -66,7 +71,8 @@ def listar_pecas(
 )
 def buscar_peca(
     peca_id: int,
-    service: PecaService = Depends(get_service)
+    service: PecaService = Depends(get_service),
+    usuario=Depends(get_current_user)
 ):
 
     peca = service.buscar_por_id(
@@ -83,7 +89,8 @@ def buscar_peca(
 )
 def criar_peca(
     dto: PecaCreateDTO,
-    service: PecaService = Depends(get_service)
+    service: PecaService = Depends(get_service),
+    usuario=Depends(get_current_user)
 ):
 
     peca = service.criar(
@@ -104,7 +111,8 @@ def criar_peca(
 def atualizar_peca(
     peca_id: int,
     dto: PecaCreateDTO,
-    service: PecaService = Depends(get_service)
+    service: PecaService = Depends(get_service),
+    usuario=Depends(get_current_user)
 ):
 
     peca = service.atualizar(
@@ -125,7 +133,8 @@ def atualizar_peca(
 )
 def deletar_peca(
     peca_id: int,
-    service: PecaService = Depends(get_service)
+    service: PecaService = Depends(get_service),
+    usuario=Depends(get_current_user)
 ):
 
     service.deletar(peca_id)

@@ -17,6 +17,12 @@ from app.exceptions.auth_exceptions import (
     CredenciaisInvalidasException
 )
 
+from app.exceptions.cliente_exceptions import (
+    ClienteNaoEncontradoException,
+    ClienteJaExisteException,
+    CepInvalidoException
+)
+
 
 async def categoria_nao_encontrada_handler(
     request: Request,
@@ -90,4 +96,33 @@ async def usuario_ja_existe_handler(
         content={
             "erro": str(exc)
         }
+    )
+
+async def cliente_nao_encontrado_handler(
+    request,
+    exc: ClienteNaoEncontradoException
+):
+    return JSONResponse(
+        status_code=404,
+        content={"erro": str(exc)}
+    )
+
+
+async def cliente_ja_existe_handler(
+    request,
+    exc: ClienteJaExisteException
+):
+    return JSONResponse(
+        status_code=400,
+        content={"erro": str(exc)}
+    )
+
+
+async def cep_invalido_handler(
+    request,
+    exc: CepInvalidoException
+):
+    return JSONResponse(
+        status_code=400,
+        content={"erro": str(exc)}
     )

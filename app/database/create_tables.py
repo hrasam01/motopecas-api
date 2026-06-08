@@ -4,5 +4,6 @@ from app.database.database import engine
 from app.model.categoria import Categoria
 from app.model.peca import Peca
 from app.model.usuario import Usuario
+from app.model.cliente import Cliente
 
 Base.metadata.create_all(bind=engine)

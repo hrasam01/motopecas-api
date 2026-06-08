@@ -1,6 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.security.auth_dependency import (
+    get_current_user
+)
+
 from app.database.dependencies import get_db
 from app.dto.categoria_dto import (
     CategoriaCreateDTO,
@@ -28,7 +32,8 @@ def get_service(db: Session = Depends(get_db)):
 
 @router.get("/", response_model=list[CategoriaResponseDTO])
 def listar_categorias(
-    service: CategoriaService = Depends(get_service)
+    service: CategoriaService = Depends(get_service),
+    usuario=Depends(get_current_user)
 ):
     categorias = service.listar()
 
@@ -42,7 +47,8 @@ def listar_categorias(
             response_model=CategoriaResponseDTO)
 def buscar_categoria(
     categoria_id: int,
-    service: CategoriaService = Depends(get_service)
+    service: CategoriaService = Depends(get_service),
+    usuario=Depends(get_current_user)
 ):
     categoria = service.buscar_por_id(categoria_id)
 
@@ -53,7 +59,8 @@ def buscar_categoria(
              status_code=201)
 def criar_categoria(
     dto: CategoriaCreateDTO,
-    service: CategoriaService = Depends(get_service)
+    service: CategoriaService = Depends(get_service),
+    usuario=Depends(get_current_user)
 ):
     categoria = service.criar(
         nome=dto.nome,
@@ -67,7 +74,8 @@ def criar_categoria(
 def atualizar_categoria(
     categoria_id: int,
     dto: CategoriaCreateDTO,
-    service: CategoriaService = Depends(get_service)
+    service: CategoriaService = Depends(get_service),
+    usuario=Depends(get_current_user)
 ):
     categoria = service.atualizar(
         categoria_id=categoria_id,
@@ -81,6 +89,7 @@ def atualizar_categoria(
                status_code=204)
 def deletar_categoria(
     categoria_id: int,
-    service: CategoriaService = Depends(get_service)
+    service: CategoriaService = Depends(get_service),
+    usuario=Depends(get_current_user)
 ):
     service.deletar(categoria_id)
