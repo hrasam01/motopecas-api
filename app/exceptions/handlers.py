@@ -12,6 +12,11 @@ from app.exceptions.peca_exceptions import (
     EstoqueInvalidoException
 )
 
+from app.exceptions.auth_exceptions import (
+    UsuarioJaExisteException,
+    CredenciaisInvalidasException
+)
+
 
 async def categoria_nao_encontrada_handler(
     request: Request,
@@ -63,4 +68,26 @@ async def estoque_invalido_handler(
     return JSONResponse(
         status_code=400,
         content={"erro": str(exc)}
+    )
+
+async def credenciais_invalidas_handler(
+    request: Request,
+    exc: CredenciaisInvalidasException
+):
+    return JSONResponse(
+        status_code=401,
+        content={
+            "erro": str(exc)
+        }
+    )
+
+async def usuario_ja_existe_handler(
+    request: Request,
+    exc: UsuarioJaExisteException
+):
+    return JSONResponse(
+        status_code=400,
+        content={
+            "erro": str(exc)
+        }
     )

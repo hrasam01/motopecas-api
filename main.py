@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from app.controller.categoria_controller import (
     router as categoria_router
 )
+
 from app.controller.peca_controller import (
     router as peca_router
 )
@@ -11,12 +12,18 @@ from app.controller.usuario_controller import (
     router as usuario_router
 )
 
+from app.controller.auth_controller import (
+    router as auth_router
+)
+
 from app.exceptions.handlers import (
     categoria_nao_encontrada_handler,
     categoria_duplicada_handler,
     peca_nao_encontrada_handler,
     preco_invalido_handler,
-    estoque_invalido_handler
+    estoque_invalido_handler,
+    usuario_ja_existe_handler,
+    credenciais_invalidas_handler
 )
 
 from app.exceptions.categoria_exceptions import (
@@ -30,6 +37,11 @@ from app.exceptions.peca_exceptions import (
     EstoqueInvalidoException
 )
 
+from app.exceptions.auth_exceptions import (
+    UsuarioJaExisteException,
+    CredenciaisInvalidasException
+)
+
 app = FastAPI(
     title="MotoPeças API",
     description="API para gerenciamento de peças de motocicletas",
@@ -39,6 +51,7 @@ app = FastAPI(
 app.include_router(categoria_router)
 app.include_router(peca_router)
 app.include_router(usuario_router)
+app.include_router(auth_router)
 
 app.add_exception_handler(
     CategoriaNaoEncontradaException,
@@ -63,6 +76,16 @@ app.add_exception_handler(
 app.add_exception_handler(
     EstoqueInvalidoException,
     estoque_invalido_handler
+)
+
+app.add_exception_handler(
+    UsuarioJaExisteException,
+    usuario_ja_existe_handler
+)
+
+app.add_exception_handler(
+    CredenciaisInvalidasException,
+    credenciais_invalidas_handler
 )
 
 @app.get("/")
