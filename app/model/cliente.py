@@ -2,7 +2,8 @@ from sqlalchemy import String
 
 from sqlalchemy.orm import (
     Mapped,
-    mapped_column
+    mapped_column,
+    relationship
 )
 
 from app.database.base import Base
@@ -62,4 +63,8 @@ class Cliente(Base):
     estado: Mapped[str] = mapped_column(
         String(2),
         nullable=False
+    )
+    
+    vendas = relationship(
+        "Venda"
     )
