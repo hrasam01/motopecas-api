@@ -7,6 +7,10 @@ from app.controller.peca_controller import (
     router as peca_router
 )
 
+from app.controller.usuario_controller import (
+    router as usuario_router
+)
+
 from app.exceptions.handlers import (
     categoria_nao_encontrada_handler,
     categoria_duplicada_handler,
@@ -34,6 +38,7 @@ app = FastAPI(
 
 app.include_router(categoria_router)
 app.include_router(peca_router)
+app.include_router(usuario_router)
 
 app.add_exception_handler(
     CategoriaNaoEncontradaException,
