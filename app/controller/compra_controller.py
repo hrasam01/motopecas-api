@@ -66,6 +66,10 @@ def get_service(
     response_model=list[CompraResponseDTO]
 )
 def listar_compras(
+    fornecedor_id: int | None = None,
+    peca_id: int | None = None,
+    data_inicio: str | None = None,
+    data_fim: str | None = None,
     service: CompraService = Depends(
         get_service
     ),
@@ -74,7 +78,12 @@ def listar_compras(
     )
 ):
 
-    compras = service.listar()
+    compras = service.listar(
+        fornecedor_id=fornecedor_id,
+        peca_id=peca_id,
+        data_inicio=data_inicio,
+        data_fim=data_fim
+    )
 
     return [
         CompraMapper.to_dto(compra)

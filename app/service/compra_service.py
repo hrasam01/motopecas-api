@@ -37,8 +37,13 @@ class CompraService:
         self.peca_repository = peca_repository
         self.fornecedor_repository = fornecedor_repository
 
-    def listar(self):
-        return self.compra_repository.listar()
+    def listar(self, fornecedor_id: int | None = None, peca_id: int | None = None, data_inicio: str | None = None, data_fim: str | None = None):
+        return self.compra_repository.listar(
+            fornecedor_id=fornecedor_id,
+            peca_id=peca_id,
+            data_inicio=data_inicio,
+            data_fim=data_fim
+        )
 
     def criar(
         self,

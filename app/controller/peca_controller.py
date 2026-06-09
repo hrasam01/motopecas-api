@@ -53,11 +53,20 @@ def get_service(
     response_model=list[PecaResponseDTO]
 )
 def listar_pecas(
+    categoria_id: int | None = None,
+    preco_min: float | None = None,
+    preco_max: float | None = None,
+    nome: str | None = None,
     service: PecaService = Depends(get_service),
     usuario=Depends(get_current_user)
 ):
 
-    pecas = service.listar()
+    pecas = service.listar(
+        categoria_id=categoria_id,
+        preco_min=preco_min,
+        preco_max=preco_max,
+        nome=nome
+    )
 
     return [
         PecaMapper.to_dto(peca)

@@ -38,8 +38,13 @@ class VendaService:
         self.cliente_repository = cliente_repository
         self.peca_repository = peca_repository
 
-    def listar(self):
-        return self.venda_repository.listar()
+    def listar(self, cliente_id: int | None = None, peca_id: int | None = None, data_inicio: str | None = None, data_fim: str | None = None):
+        return self.venda_repository.listar(
+            cliente_id=cliente_id,
+            peca_id=peca_id,
+            data_inicio=data_inicio,
+            data_fim=data_fim
+        )
 
     def criar(
         self,

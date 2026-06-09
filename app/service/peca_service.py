@@ -29,8 +29,13 @@ class PecaService:
         self.peca_repository = peca_repository
         self.categoria_repository = categoria_repository
 
-    def listar(self):
-        return self.peca_repository.listar()
+    def listar(self, categoria_id: int | None = None, preco_min: float | None = None, preco_max: float | None = None, nome: str | None = None):
+        return self.peca_repository.listar(
+            categoria_id=categoria_id,
+            preco_min=preco_min,
+            preco_max=preco_max,
+            nome=nome
+        )
 
     def buscar_por_id(self, peca_id: int):
 

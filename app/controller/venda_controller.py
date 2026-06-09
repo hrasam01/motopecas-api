@@ -58,6 +58,10 @@ def get_service(
     response_model=list[VendaResponseDTO]
 )
 def listar_vendas(
+    cliente_id: int | None = None,
+    peca_id: int | None = None,
+    data_inicio: str | None = None,
+    data_fim: str | None = None,
     service: VendaService = Depends(
         get_service
     ),
@@ -66,7 +70,12 @@ def listar_vendas(
     )
 ):
 
-    vendas = service.listar()
+    vendas = service.listar(
+        cliente_id=cliente_id,
+        peca_id=peca_id,
+        data_inicio=data_inicio,
+        data_fim=data_fim
+    )
 
     return [
         VendaMapper.to_dto(venda)
