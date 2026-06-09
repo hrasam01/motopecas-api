@@ -3,12 +3,20 @@ import Login from './pages/Login.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import Pecas from './pages/Pecas.jsx'
 import Clientes from './pages/Clientes.jsx'
+import Fornecedores from './pages/Fornecedores.jsx'
+import Compras from './pages/Compras.jsx'
+import Vendas from './pages/Vendas.jsx'
+import Usuarios from './pages/Usuarios.jsx'
 import Financeiro from './pages/Financeiro.jsx'
 
 const PAGINAS = {
   dashboard: { titulo: 'Dashboard', componente: Dashboard },
   pecas: { titulo: 'Peças', componente: Pecas },
   clientes: { titulo: 'Clientes', componente: Clientes },
+  fornecedores: { titulo: 'Fornecedores', componente: Fornecedores },
+  compras: { titulo: 'Compras', componente: Compras },
+  vendas: { titulo: 'Vendas', componente: Vendas },
+  usuarios: { titulo: 'Usuários', componente: Usuarios },
   financeiro: { titulo: 'Financeiro', componente: Financeiro },
 }
 

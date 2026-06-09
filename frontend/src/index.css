@@ -289,3 +289,106 @@ tr:hover td {
   color: #e63946;
   font-weight: 600;
 }
+
+/* BUTTONS */
+.btn-primary {
+  background: #e63946;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+}
+.btn-primary:hover {
+  background: #c1121f;
+}
+.btn-secondary {
+  background: #e0e0e0;
+  color: #333;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+}
+.btn-secondary:hover {
+  background: #ccc;
+}
+.btn-small {
+  background: #1a1a2e;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+}
+.btn-small:hover {
+  background: #333;
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  width: 520px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.modal h3 {
+  font-size: 20px;
+  margin-bottom: 24px;
+  color: #1a1a2e;
+}
+.modal .field {
+  margin-bottom: 16px;
+}
+.modal label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+.modal input, .modal select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  background: white;
+}
+.modal input:focus, .modal select:focus {
+  border-color: #e63946;
+}
+.modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 16px;
+}
+.modal .field:has(textarea) {
+  grid-column: 1 / -1;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}

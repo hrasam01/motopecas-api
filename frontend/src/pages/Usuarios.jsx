@@ -1,21 +1,21 @@
 import { useState, useEffect } from 'react'
-import { getClientes, criarCliente } from '../api.js'
+import { getUsuarios, criarUsuario } from '../api.js'
 
-export default function Clientes() {
-  const [clientes, setClientes] = useState([])
+export default function Usuarios() {
+  const [usuarios, setUsuarios] = useState([])
   const [erro, setErro] = useState('')
   const [showModal, setShowModal] = useState(false)
-  const [form, setForm] = useState({ nome: '', cpf: '', email: '', telefone: '', cep: '' })
+  const [form, setForm] = useState({ nome: '', email: '', senha: '' })
 
-  function load() { getClientes().then(setClientes).catch(e => setErro(e.message)) }
+  function load() { getUsuarios().then(setUsuarios).catch(e => setErro(e.message)) }
   useEffect(load, [])
 
   async function handleSubmit(e) {
     e.preventDefault()
     try {
-      await criarCliente(form)
+      await criarUsuario(form)
       setShowModal(false)
-      setForm({ nome: '', cpf: '', email: '', telefone: '', cep: '' })
+      setForm({ nome: '', email: '', senha: '' })
       load()
     } catch (err) { setErro(err.message) }
   }
@@ -23,24 +23,24 @@ export default function Clientes() {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
-        <button className="btn-primary" onClick={() => setShowModal(true)}>+ Novo Cliente</button>
+        <button className="btn-primary" onClick={() => setShowModal(true)}>+ Novo Usuário</button>
       </div>
       {erro && <div className="error">{erro}</div>}
       <div className="table-wrapper">
         <table>
           <thead>
             <tr>
-              <th>ID</th><th>Nome</th><th>CPF</th><th>Email</th><th>Telefone</th><th>Cidade</th><th>Estado</th>
+              <th>ID</th><th>Nome</th><th>Email</th>
             </tr>
           </thead>
           <tbody>
-            {clientes.map(c => (
-              <tr key={c.id}>
-                <td>{c.id}</td><td>{c.nome}</td><td>{c.cpf}</td><td>{c.email}</td><td>{c.telefone}</td><td>{c.cidade}</td><td>{c.estado}</td>
+            {usuarios.map(u => (
+              <tr key={u.id}>
+                <td>{u.id}</td><td>{u.nome}</td><td>{u.email}</td>
               </tr>
             ))}
-            {clientes.length === 0 && !erro && (
-              <tr><td colSpan={7} style={{ textAlign: 'center', padding: 40, color: '#888' }}>Nenhum cliente encontrado</td></tr>
+            {usuarios.length === 0 && !erro && (
+              <tr><td colSpan={3} style={{ textAlign: 'center', padding: 40, color: '#888' }}>Nenhum usuário encontrado</td></tr>
             )}
           </tbody>
         </table>
@@ -48,14 +48,12 @@ export default function Clientes() {
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal" onClick={e => e.stopPropagation()}>
-            <h3>Novo Cliente</h3>
+            <h3>Novo Usuário</h3>
             <form onSubmit={handleSubmit}>
               <div className="modal-grid">
                 <div className="field"><label>Nome</label><input value={form.nome} onChange={e => setForm(f => ({ ...f, nome: e.target.value }))} required /></div>
-                <div className="field"><label>CPF</label><input value={form.cpf} onChange={e => setForm(f => ({ ...f, cpf: e.target.value }))} required placeholder="000.000.000-00" /></div>
                 <div className="field"><label>Email</label><input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} required /></div>
-                <div className="field"><label>Telefone</label><input value={form.telefone} onChange={e => setForm(f => ({ ...f, telefone: e.target.value }))} required /></div>
-                <div className="field"><label>CEP</label><input value={form.cep} onChange={e => setForm(f => ({ ...f, cep: e.target.value }))} required placeholder="00000-000" /></div>
+                <div className="field"><label>Senha</label><input type="password" value={form.senha} onChange={e => setForm(f => ({ ...f, senha: e.target.value }))} required minLength={6} /></div>
               </div>
               <div className="modal-actions">
                 <button type="button" className="btn-secondary" onClick={() => setShowModal(false)}>Cancelar</button>

@@ -1,21 +1,21 @@
 import { useState, useEffect } from 'react'
-import { getClientes, criarCliente } from '../api.js'
+import { getFornecedores, criarFornecedor } from '../api.js'
 
-export default function Clientes() {
-  const [clientes, setClientes] = useState([])
+export default function Fornecedores() {
+  const [fornecedores, setFornecedores] = useState([])
   const [erro, setErro] = useState('')
   const [showModal, setShowModal] = useState(false)
-  const [form, setForm] = useState({ nome: '', cpf: '', email: '', telefone: '', cep: '' })
+  const [form, setForm] = useState({ razao_social: '', cnpj: '', email: '', telefone: '', cep: '' })
 
-  function load() { getClientes().then(setClientes).catch(e => setErro(e.message)) }
+  function load() { getFornecedores().then(setFornecedores).catch(e => setErro(e.message)) }
   useEffect(load, [])
 
   async function handleSubmit(e) {
     e.preventDefault()
     try {
-      await criarCliente(form)
+      await criarFornecedor(form)
       setShowModal(false)
-      setForm({ nome: '', cpf: '', email: '', telefone: '', cep: '' })
+      setForm({ razao_social: '', cnpj: '', email: '', telefone: '', cep: '' })
       load()
     } catch (err) { setErro(err.message) }
   }
@@ -23,24 +23,24 @@ export default function Clientes() {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
-        <button className="btn-primary" onClick={() => setShowModal(true)}>+ Novo Cliente</button>
+        <button className="btn-primary" onClick={() => setShowModal(true)}>+ Novo Fornecedor</button>
       </div>
       {erro && <div className="error">{erro}</div>}
       <div className="table-wrapper">
         <table>
           <thead>
             <tr>
-              <th>ID</th><th>Nome</th><th>CPF</th><th>Email</th><th>Telefone</th><th>Cidade</th><th>Estado</th>
+              <th>ID</th><th>Razão Social</th><th>CNPJ</th><th>Email</th><th>Telefone</th><th>Cidade</th><th>Estado</th>
             </tr>
           </thead>
           <tbody>
-            {clientes.map(c => (
-              <tr key={c.id}>
-                <td>{c.id}</td><td>{c.nome}</td><td>{c.cpf}</td><td>{c.email}</td><td>{c.telefone}</td><td>{c.cidade}</td><td>{c.estado}</td>
+            {fornecedores.map(f => (
+              <tr key={f.id}>
+                <td>{f.id}</td><td>{f.razao_social}</td><td>{f.cnpj}</td><td>{f.email}</td><td>{f.telefone}</td><td>{f.cidade}</td><td>{f.estado}</td>
               </tr>
             ))}
-            {clientes.length === 0 && !erro && (
-              <tr><td colSpan={7} style={{ textAlign: 'center', padding: 40, color: '#888' }}>Nenhum cliente encontrado</td></tr>
+            {fornecedores.length === 0 && !erro && (
+              <tr><td colSpan={7} style={{ textAlign: 'center', padding: 40, color: '#888' }}>Nenhum fornecedor encontrado</td></tr>
             )}
           </tbody>
         </table>
@@ -48,11 +48,11 @@ export default function Clientes() {
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal" onClick={e => e.stopPropagation()}>
-            <h3>Novo Cliente</h3>
+            <h3>Novo Fornecedor</h3>
             <form onSubmit={handleSubmit}>
               <div className="modal-grid">
-                <div className="field"><label>Nome</label><input value={form.nome} onChange={e => setForm(f => ({ ...f, nome: e.target.value }))} required /></div>
-                <div className="field"><label>CPF</label><input value={form.cpf} onChange={e => setForm(f => ({ ...f, cpf: e.target.value }))} required placeholder="000.000.000-00" /></div>
+                <div className="field"><label>Razão Social</label><input value={form.razao_social} onChange={e => setForm(f => ({ ...f, razao_social: e.target.value }))} required /></div>
+                <div className="field"><label>CNPJ</label><input value={form.cnpj} onChange={e => setForm(f => ({ ...f, cnpj: e.target.value }))} required placeholder="00.000.000/0000-00" /></div>
                 <div className="field"><label>Email</label><input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} required /></div>
                 <div className="field"><label>Telefone</label><input value={form.telefone} onChange={e => setForm(f => ({ ...f, telefone: e.target.value }))} required /></div>
                 <div className="field"><label>CEP</label><input value={form.cep} onChange={e => setForm(f => ({ ...f, cep: e.target.value }))} required placeholder="00000-000" /></div>
