@@ -1,5 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import Optional
+
+from app.dto.validators import validar_cpf
 
 
 class ClienteCreateDTO(BaseModel):
@@ -8,6 +10,11 @@ class ClienteCreateDTO(BaseModel):
     email: str
     telefone: str
     cep: str
+
+    @field_validator("cpf")
+    @classmethod
+    def validar_cpf(cls, v: str) -> str:
+        return validar_cpf(v)
 
 
 class ClienteResponseDTO(BaseModel):

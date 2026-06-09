@@ -102,8 +102,8 @@ def seed():
             {"nome": "João Silva", "cpf": "529.982.247-25", "email": "joao.silva@email.com", "telefone": "(11) 99999-0001", "cep": "01001-000", "logradouro": "Praça da Sé", "bairro": "Sé", "cidade": "São Paulo", "estado": "SP"},
             {"nome": "Maria Santos", "cpf": "123.456.789-09", "email": "maria.santos@email.com", "telefone": "(21) 98888-0002", "cep": "20040-020", "logradouro": "Rua Primeiro de Março", "bairro": "Centro", "cidade": "Rio de Janeiro", "estado": "RJ"},
             {"nome": "Pedro Oliveira", "cpf": "987.654.321-00", "email": "pedro.oliveira@email.com", "telefone": "(31) 97777-0003", "cep": "30140-070", "logradouro": "Rua da Bahia", "bairro": "Funcionários", "cidade": "Belo Horizonte", "estado": "MG"},
-            {"nome": "Ana Souza", "cpf": "111.222.333-44", "email": "ana.souza@email.com", "telefone": "(41) 96666-0004", "cep": "80010-010", "logradouro": "Praça Tiradentes", "bairro": "Centro", "cidade": "Curitiba", "estado": "PR"},
-            {"nome": "Carlos Pereira", "cpf": "555.666.777-88", "email": "carlos.pereira@email.com", "telefone": "(51) 95555-0005", "cep": "90010-050", "logradouro": "Rua dos Andradas", "bairro": "Centro", "cidade": "Porto Alegre", "estado": "RS"},
+            {"nome": "Ana Souza", "cpf": "946.762.113-41", "email": "ana.souza@email.com", "telefone": "(41) 96666-0004", "cep": "80010-010", "logradouro": "Praça Tiradentes", "bairro": "Centro", "cidade": "Curitiba", "estado": "PR"},
+            {"nome": "Carlos Pereira", "cpf": "348.704.580-04", "email": "carlos.pereira@email.com", "telefone": "(51) 95555-0005", "cep": "90010-050", "logradouro": "Rua dos Andradas", "bairro": "Centro", "cidade": "Porto Alegre", "estado": "RS"},
         ]
         clientes = []
         for c in clientes_data:
@@ -113,9 +113,9 @@ def seed():
             clientes.append(cliente)
 
         fornecedores_data = [
-            {"razao_social": "Peças Motor Brasil Ltda", "cnpj": "11.222.333/0001-44", "email": "vendas@pecasmotor.com", "telefone": "(11) 3333-0001", "cep": "01001-000", "logradouro": "Praça da Sé", "bairro": "Sé", "cidade": "São Paulo", "estado": "SP"},
-            {"razao_social": "Distribuidora 2 Rodas S.A.", "cnpj": "44.555.666/0001-77", "email": "contato@2rodas.com", "telefone": "(21) 3333-0002", "cep": "20040-020", "logradouro": "Rua Primeiro de Março", "bairro": "Centro", "cidade": "Rio de Janeiro", "estado": "RJ"},
-            {"razao_social": "MotoPeças Center", "cnpj": "77.888.999/0001-00", "email": "admin@motopecascenter.com", "telefone": "(31) 3333-0003", "cep": "30140-070", "logradouro": "Rua da Bahia", "bairro": "Funcionários", "cidade": "Belo Horizonte", "estado": "MG"},
+            {"razao_social": "Peças Motor Brasil Ltda", "cnpj": "06.215.096/0001-91", "email": "vendas@pecasmotor.com", "telefone": "(11) 3333-0001", "cep": "01001-000", "logradouro": "Praça da Sé", "bairro": "Sé", "cidade": "São Paulo", "estado": "SP"},
+            {"razao_social": "Distribuidora 2 Rodas S.A.", "cnpj": "89.462.776/0001-37", "email": "contato@2rodas.com", "telefone": "(21) 3333-0002", "cep": "20040-020", "logradouro": "Rua Primeiro de Março", "bairro": "Centro", "cidade": "Rio de Janeiro", "estado": "RJ"},
+            {"razao_social": "MotoPeças Center", "cnpj": "60.384.355/0001-53", "email": "admin@motopecascenter.com", "telefone": "(31) 3333-0003", "cep": "30140-070", "logradouro": "Rua da Bahia", "bairro": "Funcionários", "cidade": "Belo Horizonte", "estado": "MG"},
         ]
         fornecedores = []
         for f in fornecedores_data:
