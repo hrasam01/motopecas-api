@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.controller.categoria_controller import (
     router as categoria_router
@@ -55,7 +57,8 @@ from app.exceptions.handlers import (
     fornecedor_ja_existe_handler,
     compra_invalida_handler,
     venda_invalida_handler,
-    estoque_insuficiente_handler
+    estoque_insuficiente_handler,
+    problema
 )
 
 from app.exceptions.categoria_exceptions import (
@@ -94,11 +97,23 @@ from app.exceptions.venda_exceptions import (
     EstoqueInsuficienteException
 )
 
+async def http_exception_handler(request, exc):
+    return problema(request, exc.status_code, exc.detail)
+
+
+async def validation_exception_handler(request, exc):
+    erros = "; ".join(f"{e['loc'][-1]}: {e['msg']}" for e in exc.errors())
+    return problema(request, 422, erros)
+
+
 app = FastAPI(
     title="MotoPeças API",
     description="API para gerenciamento de peças de motocicletas",
     version="1.0.0"
 )
+
+app.add_exception_handler(StarletteHTTPException, http_exception_handler)
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
 
 app.include_router(categoria_router)
 app.include_router(peca_router)
