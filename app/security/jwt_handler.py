@@ -1,12 +1,7 @@
 from datetime import datetime, timedelta
 
 from jose import jwt
-
-SECRET_KEY = "motopecas_super_secret_key"
-
-ALGORITHM = "HS256"
-
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+from app.config.settings import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
 
 def criar_token(

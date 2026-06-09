@@ -36,6 +36,10 @@ from app.controller.financeiro_controller import (
     router as financeiro_router
 )
 
+from app.controller.dashboard_controller import (
+    router as dashboard_router
+)
+
 from app.exceptions.handlers import (
     categoria_nao_encontrada_handler,
     categoria_duplicada_handler,
@@ -105,6 +109,7 @@ app.include_router(fornecedor_router)
 app.include_router(compra_router)
 app.include_router(venda_router)
 app.include_router(financeiro_router)
+app.include_router(dashboard_router)
 
 app.add_exception_handler(
     CategoriaNaoEncontradaException,
