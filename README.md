@@ -1,95 +1,140 @@
 # MotoPeças API
 
-API REST para gerenciamento de uma loja de peças de motocicletas. Desenvolvida como projeto acadêmico da disciplina de Backend.
+API REST para gerenciamento de uma loja de peças de motocicletas. Projeto acadêmico da disciplina de Backend.
+
+## Dados Acadêmicos
+
+| | |
+|---|---|
+| **Aluno(a)** | Hrasam Hussem Gomes Monteiro |
+| **Professor(a)** | Rodrigo da Cruz Fujioka |
+| **Disciplina** | Tecnologia para Back-end |
+| **Instituição** | Uniesp |
 
 ## Funcionalidades
 
 - **Categorias** — CRUD de categorias de peças
 - **Peças** — CRUD com validação de preço e estoque
 - **Usuários** — Cadastro com senha criptografada (bcrypt)
-- **Autenticação** — Login com JWT
-- **Clientes** — Cadastro com consulta automática de CEP (BrasilAPI)
-- **Fornecedores** — Cadastro com consulta automática de CEP
+- **Autenticação** — Login com JWT (Bearer token)
+- **Clientes** — Cadastro com consulta automática de CEP via BrasilAPI
+- **Fornecedores** — Cadastro com consulta automática de CEP via BrasilAPI
 - **Compras** — Registro de compras com atualização automática do estoque
-- **Vendas** — Registro de vendas com baixa no estoque
+- **Vendas** — Registro de vendas com baixa no estoque (valida disponibilidade)
 - **Financeiro** — Resumo de compras, vendas e saldo
-- **Dashboard** — Indicadores gerais do sistema
+- **Dashboard** — Indicadores gerais (total de clientes, peças, compras, vendas, etc.)
 
 ## Tecnologias
 
 | Camada | Tecnologia |
 |--------|-----------|
-| Linguagem | Python 3.12 |
+| Linguagem | Python 3.12+ |
 | Framework | FastAPI |
 | ORM | SQLAlchemy 2 |
-| Banco | PostgreSQL |
+| Banco | PostgreSQL 15+ |
 | Validação | Pydantic v2 |
 | Autenticação | JWT (python-jose) |
 | Senhas | bcrypt |
-| Integração | BrasilAPI (CEP) |
+| Integração | BrasilAPI (consulta de CEP) |
 | Documentação | Swagger (OpenAPI) |
 | Testes | pytest |
+| Frontend | React 19 + Vite 6 |
 
 ## Arquitetura
 
+O projeto segue o padrão **controller → service → repository → model**, separando cada responsabilidade em camadas:
+
 ```
 app/
-├── controller/   # Rotas e endpoints
-├── service/      # Regras de negócio
-├── repository/   # Acesso a dados
-├── model/        # Entidades ORM
-├── dto/          # Schemas de entrada/saída
+├── controller/   # Rotas e endpoints (FastAPI routers)
+├── service/      # Regras de negócio e validações
+├── repository/   # Acesso a dados (SQLAlchemy queries)
+├── model/        # Entidades ORM (SQLAlchemy models)
+├── dto/          # Schemas de entrada/saída (Pydantic)
 ├── mapper/       # Conversão model → DTO
-├── exceptions/   # Exceções customizadas + handlers
+├── exceptions/   # Exceções customizadas + handlers (RFC 7807)
 ├── security/     # JWT, bcrypt, dependência de autenticação
-├── integrations/ # Integração com APIs externas
+├── integrations/ # Integração com APIs externas (BrasilAPI)
 ├── database/     # Conexão, sessão, criação de tabelas
-└── config/       # Configurações do ambiente
+└── config/       # Configurações via variáveis de ambiente
+```
+
+### Fluxo de requisição
+
+```
+Request → controller → service → repository → database
+                          ↓
+                    integrações externas (BrasilAPI)
+```
+
+### Modelo de dados (7 tabelas)
+
+```
+categorias ──┐
+             ├── pecas ──┬── compras ── fornecedores
+             │           └── vendas  ── clientes
+             └── (referência via categoria_id)
+usuarios (autenticação independente)
 ```
 
 ## Pré-requisitos
 
 - Python 3.12+
 - PostgreSQL 15+
-- Pip
+- pip
+- Node.js 18+ (para o frontend)
 
-## Setup
+## Setup — Backend
 
 ```bash
-# Clonar o repositório
+# 1. Clonar o repositório
 git clone <repo-url>
 cd motopecas-api-copy
 
-# Criar ambiente virtual
+# 2. Criar ambiente virtual
 python3 -m venv .venv
 source .venv/bin/activate
 
-# Instalar dependências
+# 3. Instalar dependências
 pip install -r requirements.txt
 
-# Configurar variáveis de ambiente
-cp .env.example .env
-# Editar .env com suas credenciais do PostgreSQL
+# 4. Configurar variáveis de ambiente
+# Edite o arquivo .env com as credenciais do seu PostgreSQL
+vim .env
 
-# Criar o banco de dados
+# 5. Criar o banco de dados
 psql -U postgres -c "CREATE DATABASE motopecas;"
 
-# Executar a aplicação
+# 6. Executar a aplicação
 uvicorn main:app --reload
 ```
 
-Acessar: http://localhost:8000
+A API estará disponível em: **http://localhost:8000**
 
-Swagger: http://localhost:8000/docs
+Documentação Swagger: **http://localhost:8000/docs**
+
+## Setup — Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+O frontend estará disponível em: **http://localhost:5173**
+
+O Vite já está configurado com proxy para redirecionar as chamadas à API (`/auth`, `/categorias`, `/pecas`, etc.) para `http://localhost:8000`.
 
 ## Variáveis de Ambiente
+
+Arquivo `.env` na raiz do projeto:
 
 | Variável | Descrição | Padrão |
 |----------|-----------|--------|
 | `DATABASE_URL` | URL de conexão do PostgreSQL | `postgresql://postgres:postgres@localhost:5432/motopecas` |
-| `SECRET_KEY` | Chave secreta para JWT | `motopecas_super_secret_key` |
-| `ALGORITHM` | Algoritmo JWT | `HS256` |
-| `ACCESS_TOKEN_EXPIRE_MINUTES` | Expiração do token | `30` |
+| `SECRET_KEY` | Chave secreta para assinar os tokens JWT | `senha_ultrasecreta_do_banco` |
+| `ALGORITHM` | Algoritmo de criptografia do JWT | `HS256` |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | Tempo de expiração do token em minutos | `30` |
 
 ## Dados de Demonstração
 
@@ -97,24 +142,38 @@ Swagger: http://localhost:8000/docs
 python seed.py
 ```
 
-Cria:
-- **Usuário:** admin@motopecas.com / admin123
-- **Categorias:** 6 (Motor, Freios, Transmissão, Suspensão, Elétrica, Carroceria)
-- **Peças:** 23 itens com preços e estoques
-- **Clientes:** 5 clientes com endereços reais (SP, RJ, MG, PR, RS)
-- **Fornecedores:** 3 fornecedores
+Para resetar o banco antes de popular:
+
+```bash
+python seed.py --reset
+```
+
+### O que é criado:
+
+- **Usuário:** `admin@motopecas.com` / `admin123`
+- **Categorias:** 6 (Motor e Componentes, Freios, Transmissão, Suspensão e Direção, Elétrica e Iluminação, Carroceria e Acessórios)
+- **Peças:** 23 itens distribuídos entre as categorias
+- **Clientes:** 5 clientes com endereços reais (SP, RJ, MG, PR, RS) e CPFs válidos
+- **Fornecedores:** 3 fornecedores com CNPJs válidos
 - **Compras:** 6 registros com atualização de estoque
 - **Vendas:** 8 registros com baixa de estoque
 
-Para resetar: `python seed.py --reset`
-
 ## Endpoints
+
+> **Nota:** Todos os endpoints exigem autenticação via JWT (Bearer token), exceto `POST /usuarios/` (criação) e `POST /auth/login`.
 
 ### Autenticação
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
-| POST | `/auth/login` | Login (email + senha) → JWT |
+| POST | `/auth/login` | Login (username=email, password=senha) → retorna JWT |
+
+### Usuários
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| POST | `/usuarios/` | Cadastrar novo usuário (sem autenticação) |
+| GET | `/usuarios/` | Listar todos os usuários |
 
 ### Categorias
 
@@ -136,60 +195,62 @@ Para resetar: `python seed.py --reset`
 | PUT | `/pecas/{id}` | Atualizar |
 | DELETE | `/pecas/{id}` | Remover |
 
-Filtros disponíveis: `?categoria_id=&preco_min=&preco_max=&nome=`
+**Filtros disponíveis:** `?categoria_id=&preco_min=&preco_max=&nome=` (busca por nome via `ILIKE`)
 
 ### Clientes
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
 | GET | `/clientes/` | Listar |
-| POST | `/clientes/` | Criar (CEP preenchido automaticamente) |
+| POST | `/clientes/` | Criar (CEP preenchido automaticamente via BrasilAPI) |
 
 ### Fornecedores
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
 | GET | `/fornecedores/` | Listar |
-| POST | `/fornecedores/` | Criar (CEP preenchido automaticamente) |
+| POST | `/fornecedores/` | Criar (CEP preenchido automaticamente via BrasilAPI) |
 
 ### Compras
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
 | GET | `/compras/` | Listar (com filtros) |
-| POST | `/compras/` | Registrar (aumenta estoque) |
+| POST | `/compras/` | Registrar — aumenta o estoque da peça |
 
-Filtros: `?fornecedor_id=&peca_id=&data_inicio=&data_fim=`
+**Filtros:** `?fornecedor_id=&peca_id=&data_inicio=&data_fim=`
 
 ### Vendas
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
 | GET | `/vendas/` | Listar (com filtros) |
-| POST | `/vendas/` | Registrar (diminui estoque) |
+| POST | `/vendas/` | Registrar — diminui o estoque da peça |
 
-Filtros: `?cliente_id=&peca_id=&data_inicio=&data_fim=`
+**Filtros:** `?cliente_id=&peca_id=&data_inicio=&data_fim=`
 
 ### Consultas
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
-| GET | `/financeiro/` | Total compras, vendas e saldo |
-| GET | `/dashboard/` | Indicadores do sistema |
+| GET | `/financeiro/` | Total de compras, vendas e saldo |
+| GET | `/dashboard/` | Indicadores do sistema (clientes, fornecedores, peças, etc.) |
 
 ## Regras de Negócio
 
-- Preço de peça não pode ser negativo
+- Preço da peça não pode ser negativo
 - Estoque não pode ser negativo
-- Categoria deve existir ao criar/atualizar peça
-- **Compra** → quantidade_estoque += quantidade
-- **Venda** → quantidade_estoque -= quantidade (valida estoque disponível)
+- Categoria deve existir ao criar ou atualizar uma peça
+- **Compra** → `quantidade_estoque += quantidade` (aumenta o estoque)
+- **Venda** → `quantidade_estoque -= quantidade` (valida se há estoque suficiente)
 - CPF e CNPJ validados pelos dígitos verificadores
-- CEP consultado via BrasilAPI no cadastro de clientes e fornecedores
+- CEP consultado automaticamente via BrasilAPI no cadastro de clientes e fornecedores
+- Senha deve ter no mínimo 6 caracteres
+- E-mail deve ser único por usuário/cliente/fornecedor
 
 ## Tratamento de Erros
 
-Todos os erros seguem o padrão RFC 7807 (`application/problem+json`):
+Todos os erros seguem o padrão **RFC 7807** (`application/problem+json`):
 
 ```json
 {
@@ -201,27 +262,40 @@ Todos os erros seguem o padrão RFC 7807 (`application/problem+json`):
 }
 ```
 
+### Exceções customizadas
+
+| Exceção | Status | Descrição |
+|---------|--------|-----------|
+| `CategoriaNaoEncontradaException` | 404 | Categoria inexistente |
+| `CategoriaDuplicadaException` | 400 | Nome de categoria já existe |
+| `PecaNaoEncontradaException` | 404 | Peça inexistente |
+| `PecaPrecoInvalidoException` | 400 | Preço negativo |
+| `EstoqueInvalidoException` | 400 | Estoque negativo |
+| `UsuarioJaExisteException` | 400 | E-mail já cadastrado |
+| `CredenciaisInvalidasException` | 401 | Login ou senha incorretos |
+| `ClienteNaoEncontradoException` | 404 | Cliente inexistente |
+| `ClienteJaExisteException` | 400 | CPF ou e-mail já cadastrado |
+| `CepInvalidoException` | 400 | CEP não encontrado na BrasilAPI |
+| `FornecedorNaoEncontradoException` | 404 | Fornecedor inexistente |
+| `FornecedorJaExisteException` | 400 | CNPJ ou e-mail já cadastrado |
+| `CompraInvalidaException` | 400 | Dados inválidos na compra |
+| `VendaInvalidaException` | 400 | Dados inválidos na venda |
+| `EstoqueInsuficienteException` | 400 | Quantidade maior que o estoque disponível |
+
 ## Testes
 
 ```bash
+# Todos os testes
 pytest tests/ -v
+
+# Apenas testes de unidade (services, mappers, validators)
+pytest tests/ -v --ignore=tests/controller
+
+# Apenas testes de integração (API)
+pytest tests/controller/ -v
 ```
 
-## Commits
-
-```
-feat: estrutura inicial e configuração FastAPI
-feat: módulo categoria, peça, usuário
-feat: autenticação JWT
-feat: cliente e fornecedor com BrasilAPI
-feat: compras e vendas com controle de estoque
-feat: financeiro e dashboard
-feat: filtros nas consultas
-feat: custom validators (CPF, CNPJ, senha)
-feat: erros no padrão RFC 7807
-feat: testes unitários e de integração
-feat: seed de dados
-```
+Os testes de controller utilizam `TestClient` do FastAPI com `dependency_overrides` para mockar o banco e a autenticação.
 
 ## Licença
 
